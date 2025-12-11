@@ -15,13 +15,18 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4    # tells github to checkout the repository to the feature/main branch
-    - name: Build Image
-      run: docker build -t tridevg/nextjs-app:${{ github.sha }} .    # builds the docker image locally
-    - name: Tag Image
-      run: echo ${{ secrets.DOCKER_HUB_PASSWORD }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin    # login to docker hub using github secrets
-    - name: Push Image
-      run: |
-        docker push tridevg/nextjs:latest
-        docker push tridevg/nextjs-app:${{ github.sha }}    # pushes the local docker image to docker hub repository 
-    - name: Deploy to Server
-      run: echo "Deployed to Server..."
+    
+    - name: Login to Docker ### YamlMime:Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_HUB_USERNAME }}
+        password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+    
+    - name: Build and Push Docker Image ### YamlMime:Hub
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        push: true
+        tags: |
+          tridevg/nextjs:latest
+          tridevg/nextjs-app:${{ github.sha }}
