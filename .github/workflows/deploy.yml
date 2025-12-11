@@ -19,8 +19,8 @@ jobs:
     - name: Login to Docker ### YamlMime:Hub
       uses: docker/login-action@v2
       with:
-        username: ${{ secrets.DOCKER_HUB_USERNAME }}
-        password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
     
     - name: Build and Push Docker Image ### YamlMime:Hub
       uses: docker/build-push-action@v4
